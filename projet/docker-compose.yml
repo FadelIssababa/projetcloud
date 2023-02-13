@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+    db:
+        image: mysql:5.7
+        container_name: mysql_c
+        restart: always
+        volumes:
+            - db-volume:/var/lib/mysql
+            - ./entreprise.sql:/docker-entrypoint-initdb.d/entreprise.sql
+        environment:
+            MYSQL_ROOT_PASSWORD: entreprise
+            MYSQL_DATABASE: entreprise
+            MYSQL_USER: entreprise
+            MYSQL_PASSWORD: entreprise
+
+    app:
+        image: myapp
+        container_name: myapp_c
+        restart: always
+        volumes:
+            - ./app:/var/www/html
+        ports:
+            - 8080:80
+        depends_on:
+            - db
+
+volumes:
+    db-volume:
